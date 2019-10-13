@@ -1,6 +1,34 @@
 import argparse
 import time
 import progressbar
+import os
+
+def gpg_brute(ifile, wordlist):
+    with open(wordlist, 'r') as f:
+
+        for passw in f:
+            time.sleep(1)
+
+            passw = passw.strip()
+
+            command = 'gpg --batch --passphrase %s -d %s' % (passw, ifile)
+            
+            result = os.popen(command).read()
+
+            value_result = result.find("descifrado fallido")
+
+            print(value_result)
+            
+            if (value_result == -1):
+                #print(result)
+                print(passw)
+                print("Encontrado!!!")
+                break
+
+
+#    for i in progressbar.progressbar(range(100)):
+    #        time.sleep(0.02)
+
 
 
 def main():
@@ -18,14 +46,8 @@ def main():
 
     args = parser.parse_args()
 
-    print(args.file)
-    print(args.wordlist)
-
-
-    for i in progressbar.progressbar(range(100)):
-        time.sleep(0.02)
-
-
+    gpg_brute(args.file, args.wordlist)
+    
 
 if __name__ == '__main__':
     main()
